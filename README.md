@@ -8,4 +8,4 @@ This repository is a collection of projects created by students as part of lectu
 
 ## The note
 
-Lectures on Java are held within the framework of STEP University. The instructor responsible for this course is [instructor](https://github.com/denniksam). He shares his experience and knowledge with students, helping them master Java and become successful programmers.
+Lectures on Java are held within the framework of STEP University. The teacher responsible for this course is [denniksam](https://github.com/denniksam).
