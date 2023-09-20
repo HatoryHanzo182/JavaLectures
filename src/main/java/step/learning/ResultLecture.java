@@ -1,9 +1,12 @@
 package step.learning;
 
-public class App 
+public class ResultLecture
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        Dictionary dict = new Dictionary();
+
+        System.out.println(dict.TranslateENGtoRUS());
+        System.out.println(dict.TranslateRUStoENG());
     }
 }
