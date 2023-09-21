@@ -1,4 +1,4 @@
-package step.learning;
+package step.learning.Dictionary;
 import java.util.*;
 
 // Exercise

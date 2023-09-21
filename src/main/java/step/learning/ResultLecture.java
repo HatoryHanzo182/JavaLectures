@@ -1,12 +1,13 @@
 package step.learning;
 
+import step.learning.Files.WorkingFiles;
+
 public class ResultLecture
 {
     public static void main( String[] args )
     {
-        Dictionary dict = new Dictionary();
+        WorkingFiles wf = new WorkingFiles("./");
 
-        System.out.println(dict.TranslateENGtoRUS());
-        System.out.println(dict.TranslateRUStoENG());
+        wf.Run();
     }
 }
