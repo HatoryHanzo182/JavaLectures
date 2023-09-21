@@ -64,10 +64,10 @@ public class Dictionary  // This Dictionary class is a simple dictionary for tra
 
 // +  +  +  +  +  Client code.  +  +  +  +  +
 //
-//    public static void main( String[] args )
-//    {
-//        Dictionary dict = new Dictionary();
+// public static void main( String[] args )
+// {
+//      Dictionary dict = new Dictionary();
 //
-//        System.out.println(dict.TranslateENGtoRUS());
-//        System.out.println(dict.TranslateRUStoENG());
-//    }
+//      System.out.println(dict.TranslateENGtoRUS());
+//      System.out.println(dict.TranslateRUStoENG());
+// }

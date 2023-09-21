@@ -54,3 +54,12 @@ public class WorkingFiles
 
     private void ShowMessage(String message) { System.out.println(message); }  // Once this method is called with a specific message as an argument, it will be displayed on the console.
 }
+
+// +  +  +  +  +  Client code.  +  +  +  +  +
+//
+// public static void main( String[] args )
+// {
+//     WorkingFiles wf = new WorkingFiles("./");
+//
+//     wf.Run();
+// }
