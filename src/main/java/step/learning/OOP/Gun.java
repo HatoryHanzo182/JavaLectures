@@ -1,6 +1,9 @@
 package step.learning.OOP;
 
-public class Gun extends Weapon implements IClassified
+// The Gun class represents a specific implementation of a weapon, in this case a pistol,
+// and provides methods and attributes specific to that type of weapon. It also provides information about a weapon's card and
+// its classification level through methods defined in the IClassified interface.
+public class Gun extends Weapon implements IClassified, IUsed
 {
     private int _cartride;
 
@@ -14,12 +17,12 @@ public class Gun extends Weapon implements IClassified
 
     public int GetCatrige() { return _cartride; }
 
-    @Override
-    public String GetCard()
-    {
-        return String.format("Gun: '%s' (cartridge %d)", super.GetName(), this.GetCatrige());
-    }
+    @Override  // Returns a string describing the Gun, including its name and number of rounds.
+    public String GetCard() { return String.format("Gun: '%s' (cartridge %d)", super.GetName(), this.GetCatrige()); }
+
+    @Override  // Implements a method from the IClassified interface. It returns the classification level of the weapon type Gun, which,
+    public String GetLevel() { return "For civil"; }  // based on the implementation, is the string "For civil".
 
     @Override
-    public String GetLevel() { return "For civil"; }
+    public int GetYears() { return 1; }
 }

@@ -1,5 +1,6 @@
 package step.learning.OOP;
 
+// The document reflects the work of some of the principles of OOP.
 public class OOP
 {
     public void Run()
@@ -16,5 +17,7 @@ public class OOP
         armory.PrintNonAutomatic();
         System.out.println("----------------CLASSIFIED----------------");
         armory.PrintClassified();
+        System.out.println("----------------YEARS----------------");
+        armory.GetYears();
     }
 }
