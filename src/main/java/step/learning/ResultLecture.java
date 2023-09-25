@@ -1,13 +1,13 @@
 package step.learning;
 
-import step.learning.Files.WorkingFiles;
+import step.learning.OOP.OOP;
 
 public class ResultLecture
 {
     public static void main( String[] args )
     {
-        WorkingFiles wf = new WorkingFiles("./");
+        OOP oop = new OOP();
 
-        wf.Run();
+        oop.Run();
     }
 }
