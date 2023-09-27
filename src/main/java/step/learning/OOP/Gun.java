@@ -5,17 +5,17 @@ package step.learning.OOP;
 // its classification level through methods defined in the IClassified interface.
 public class Gun extends Weapon implements IClassified, IUsed
 {
-    private int _cartride;
+    private int _cartrige;
 
-    public Gun(String name, int _cartride)
+    public Gun(String name, int cartrige)
     {
         super.SetName(name);
-        this._cartride = _cartride;
+        this._cartrige = cartrige;
     }
 
-    public void SetCartrige(int cartride) { this._cartride = cartride; }
+    public void SetCartrige(int cartrige) { this._cartrige = cartrige; }
 
-    public int GetCatrige() { return _cartride; }
+    public int GetCatrige() { return _cartrige; }
 
     @Override  // Returns a string describing the Gun, including its name and number of rounds.
     public String GetCard() { return String.format("Gun: '%s' (cartridge %d)", super.GetName(), this.GetCatrige()); }
