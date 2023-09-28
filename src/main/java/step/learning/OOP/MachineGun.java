@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 // MachineGun represents a specific implementation of a weapon, in this case a machine gun,
 // and provides methods and attributes specific to that type of weapon. It also provides information about the weapon card and
 // its classification level through methods defined in the IAutomatic and IClassified interfaces.
+@ISerializable
 public class MachineGun extends Weapon implements IAutomatic, IClassified, IUsed
 {
     private double _fire_rate;
@@ -32,6 +33,7 @@ public class MachineGun extends Weapon implements IAutomatic, IClassified, IUsed
         return new MachineGun(json_object.get(required_fields[0]).getAsString(),  json_object.get(required_fields[1]).getAsInt());
     }
 
+    @IJsonParseChecker
     public static boolean IsParseableFromJSON(JsonObject json_object)
     {
         String[] required_fields = {"_name", "_fire_rate"};

@@ -2,13 +2,12 @@ package step.learning.OOP;
 
 import com.google.gson.*;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,6 +26,63 @@ public class Armory
 
     public void Remove(Weapon weapon) { _weapons.remove(weapon); }  // Method for removing weapons from the arsenal.
 
+    private List<Weapon> GetSerializableWeapons()
+    {
+        List<Weapon> result = new LinkedList<>();
+
+        for (Weapon weapon : _weapons)
+        {
+            if (weapon.getClass().isAnnotationPresent(ISerializable.class))
+                result.add(weapon);
+        }
+
+        return result;
+    }
+
+    private List<Class<?>> FindSerializableClasess()
+    {
+        List<Class<?>> weapon_clasess = new ArrayList<>();
+        String armory_name = Armory.class.getName();
+        String package_name = armory_name.substring(0, armory_name.lastIndexOf('.') + 1);
+        String package_path = package_name.replace('.', '/');
+        String resource_path = Armory.class.getClassLoader().getResource(package_path).getPath();
+
+        try { resource_path = URLDecoder.decode(resource_path, "UTF-8"); }
+        catch (UnsupportedEncodingException ignored) { }
+
+
+        File resource_dictionary = new File(resource_path);
+        File[] files = resource_dictionary.listFiles();
+
+        if (files == null)
+            throw new RuntimeException(String.format("Dictionary '%s' got no file list", resource_dictionary));
+
+        for (File file : files)
+        {
+            if(file.isDirectory())
+                continue;
+            else if(file.isFile())
+            {
+                String filename = file.getName();
+
+                if (filename.endsWith(".class"))
+                {
+                    String class_name = package_name + filename.substring(0, filename.lastIndexOf('.'));
+
+                    try
+                    {
+                        Class<?> class_type = Class.forName(class_name);
+
+                        if(class_type.isAnnotationPresent(ISerializable.class) && Weapon.class.isAssignableFrom(class_type))
+                            weapon_clasess.add(class_type);
+                    }
+                    catch (ClassNotFoundException ignored) { System.err.println("Not found: " + class_name); }
+                }
+            }
+        }
+        return weapon_clasess;
+    }
+
     public void Save()
     {
         String path = URLDecoder.decode( this.getClass().getClassLoader().getResource("./").getPath());
@@ -37,16 +93,14 @@ public class Armory
         {
             Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
 
-            writer.write(gson.toJson(_weapons));
+            writer.write(gson.toJson(this.GetSerializableWeapons()));
         }
         catch (IOException ex) { throw new RuntimeException(ex); }
     }
 
     public void Load() throws RuntimeException
     {
-        Class<?>[] weapon_classes = { Gun.class, MachineGun.class, Rifle.class };
-
-
+        Class<?>[] weapon_classes = FindSerializableClasess().toArray(new Class[0]);
 
         try( InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(
                 this.getClass().getClassLoader().getResourceAsStream("armory.json"))))
@@ -60,11 +114,25 @@ public class Armory
 
                 for(Class<?> weapon_class : weapon_classes)
                 {
-                    Method IsParseableFromJSON = weapon_class.getDeclaredMethod("IsParseableFromJSON", JsonObject.class);
+                    Method isParseableFromJSON = null; // = weapon_class.getDeclaredMethod("IsParseableFromJSON", JsonObject.class);
 
-                    IsParseableFromJSON.setAccessible(true);
+                    for (Method method : weapon_class.getDeclaredMethods())
+                    {
+                        if (method.isAnnotationPresent(IJsonParseChecker.class))
+                        {
+                            if (isParseableFromJSON != null)
+                                throw new RuntimeException(String.format("Multipple methods with @%s anotation", IJsonParseChecker.class.getName()));
 
-                    boolean res = (boolean) IsParseableFromJSON.invoke(null, json_object);
+                            isParseableFromJSON = method;
+                        }
+                    }
+
+                    if(isParseableFromJSON == null)
+                        continue;
+
+                    isParseableFromJSON.setAccessible(true);
+
+                    boolean res = (boolean) isParseableFromJSON.invoke(null, json_object);
 
                     if (res)
                     {
@@ -77,7 +145,6 @@ public class Armory
                         break;
                     }
                 }
-
 
                 if (weapon != null)
                     this._weapons.add(weapon);

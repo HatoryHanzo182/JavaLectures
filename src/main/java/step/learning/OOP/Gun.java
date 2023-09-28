@@ -31,6 +31,7 @@ public class Gun extends Weapon implements IClassified, IUsed
         return new Gun(json_object.get(required_fields[0]).getAsString(), json_object.get(required_fields[1]).getAsInt()) ;
     }
 
+    @IJsonParseChecker
     public static boolean IsParseableFromJSON(JsonObject json_object)
     {
         String[] required_fields = {"_name", "_cartridge"};
