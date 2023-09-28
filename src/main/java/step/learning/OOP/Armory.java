@@ -115,19 +115,30 @@ public class Armory
                 for(Class<?> weapon_class : weapon_classes)
                 {
                     Method isParseableFromJSON = null; // = weapon_class.getDeclaredMethod("IsParseableFromJSON", JsonObject.class);
+                    Method from_json = null; // = weapon_class.getDeclaredMethod("FromJSON", JsonObject.class);
 
                     for (Method method : weapon_class.getDeclaredMethods())
                     {
                         if (method.isAnnotationPresent(IJsonParseChecker.class))
                         {
                             if (isParseableFromJSON != null)
-                                throw new RuntimeException(String.format("Multipple methods with @%s anotation", IJsonParseChecker.class.getName()));
+                                throw new RuntimeException(String.format("Multipple methods with @%s anotation in %s class",
+                                        IJsonParseChecker.class.getName(), weapon_class.getName()));
 
                             isParseableFromJSON = method;
                         }
+                        if (method.isAnnotationPresent(IJsonFactory.class))
+                        {
+                            if (from_json != null)
+                            {
+                                throw new  RuntimeException(String.format("Multipple methods with @%s anotation in %s class",
+                                        IJsonFactory.class.getName(), weapon_class.getName()));
+                            }
+                            from_json = method;
+                        }
                     }
 
-                    if(isParseableFromJSON == null)
+                    if(isParseableFromJSON == null || from_json == null)
                         continue;
 
                     isParseableFromJSON.setAccessible(true);
@@ -136,8 +147,6 @@ public class Armory
 
                     if (res)
                     {
-                        Method from_json = weapon_class.getDeclaredMethod("FromJSON", JsonObject.class);
-
                         from_json.setAccessible(true);
 
                         weapon = (Weapon) from_json.invoke(null, json_object);
@@ -152,7 +161,7 @@ public class Armory
                     System.out.println("Weapon type unricognized");
             }
         }
-        catch(NoSuchMethodException | IllegalAccessException | InvocationTargetException ex )
+        catch(IllegalAccessException | InvocationTargetException ex )
         {
             throw new RuntimeException( "Reflection error: " + ex.getMessage() ) ;
         }
