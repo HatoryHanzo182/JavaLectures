@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 // This class represents an example of using object-oriented programming (OOP) in Java,
-//  where Weapon and the IAutomatic and IClassified interfaces represent different types of weapons and their characteristics.
+// where Weapon and the IAutomatic and IClassified interfaces represent different types of weapons and their characteristics.
 public class Armory
 {
     private final List<Weapon> _weapons;
