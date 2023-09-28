@@ -32,7 +32,7 @@ public class Rifle extends Weapon implements IUsed
 
     public static boolean IsParseableFromJSON(JsonObject json_object)
     {
-        String[] required_fields = {"_name", "_cartridge"};
+        String[] required_fields = {"_name", "_caliber"};
 
         for (String field : required_fields)
         {

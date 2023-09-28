@@ -46,6 +46,8 @@ public class Armory
     {
         Class<?>[] weapon_classes = { Gun.class, MachineGun.class, Rifle.class };
 
+
+
         try( InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(
                 this.getClass().getClassLoader().getResourceAsStream("armory.json"))))
         {
@@ -66,20 +68,17 @@ public class Armory
 
                     if (res)
                     {
-                        Method from_json = weapon_class.getDeclaredMethod("FromJson", JsonObject.class);
+                        Method from_json = weapon_class.getDeclaredMethod("FromJSON", JsonObject.class);
 
                         from_json.setAccessible(true);
 
                         weapon = (Weapon) from_json.invoke(null, json_object);
+
+                        break;
                     }
                 }
 
-                if(Gun.IsParseableFromJSON(json_object))
-                    weapon = Gun.FromJSON(json_object);
-                else if (MachineGun.IsParseableFromJSON(json_object))
-                    weapon = MachineGun.FromJSON(json_object);
-                else if(Rifle.IsParseableFromJSON(json_object))
-                    weapon = Rifle.FromJSON(json_object);
+
                 if (weapon != null)
                     this._weapons.add(weapon);
                 else

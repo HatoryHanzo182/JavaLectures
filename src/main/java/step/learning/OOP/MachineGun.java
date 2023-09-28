@@ -34,7 +34,7 @@ public class MachineGun extends Weapon implements IAutomatic, IClassified, IUsed
 
     public static boolean IsParseableFromJSON(JsonObject json_object)
     {
-        String[] required_fields = {"_name", "_cartridge"};
+        String[] required_fields = {"_name", "_fire_rate"};
 
         for (String field : required_fields)
         {
