@@ -76,3 +76,11 @@ public class OOP
         catch (NullPointerException ignored) { System.err.printf("Resource 'colt.json' not found %n"); }
     }
 }
+
+
+    // public static void main( String[] args )
+    //{
+        // OOP oop = new OOP();
+
+    //        oop.Run();
+    // }

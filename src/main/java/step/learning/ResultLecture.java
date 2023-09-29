@@ -1,13 +1,17 @@
 package step.learning;
 
-import step.learning.OOP.OOP;
+import com.google.inject.Guice;
+import step.learning.IOC.ConfigModule;
+import step.learning.IOC.IOC;
+import com.google.inject.Injector;
 
 public class ResultLecture
 {
     public static void main( String[] args )
     {
-        OOP oop = new OOP();
+        Injector injector = Guice.createInjector(new ConfigModule());
+        IOC ioc = injector.getInstance(IOC.class);
 
-        oop.Run();
+        ioc.Run();
     }
 }
