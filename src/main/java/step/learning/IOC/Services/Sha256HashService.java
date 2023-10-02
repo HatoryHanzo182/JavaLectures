@@ -4,7 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class Sha1HashService implements IHashService
+public class Sha256HashService implements IHashService
 {
     @Override
     public String Hash(String input)
@@ -14,7 +14,7 @@ public class Sha1HashService implements IHashService
 
         try
         {
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
             StringBuilder sb = new StringBuilder();
 
             for(int b : digest.digest(input.getBytes(StandardCharsets.UTF_8)))
