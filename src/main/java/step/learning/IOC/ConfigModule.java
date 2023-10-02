@@ -12,8 +12,8 @@ public class ConfigModule extends AbstractModule
     @Override
     protected void configure()
     {
-        // bind(IHashService.class).to(Md5HashService.class);  // <-- MD5.
+        bind(IHashService.class).to(Md5HashService.class);  // <-- MD5.
         // bind(IHashService.class).to(Sha1HashService.class);  // <-- SHA-1.
-        bind(IHashService.class).to(Sha256HashService.class);  // <-- SHA-256.
+        // bind(IHashService.class).to(Sha256HashService.class);  // <-- SHA-256.
     }
 }

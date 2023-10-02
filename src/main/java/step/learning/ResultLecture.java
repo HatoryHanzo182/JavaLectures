@@ -4,14 +4,12 @@ import com.google.inject.Guice;
 import step.learning.IOC.ConfigModule;
 import step.learning.IOC.IOC;
 import com.google.inject.Injector;
+import step.learning.IOC.IOC2;
 
 public class ResultLecture
 {
     public static void main( String[] args )
     {
-        Injector injector = Guice.createInjector(new ConfigModule());
-        IOC ioc = injector.getInstance(IOC.class);
-
-        ioc.Run();
+        Guice.createInjector(new ConfigModule()).getInstance(IOC2.class).Run();
     }
 }

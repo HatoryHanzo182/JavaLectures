@@ -4,10 +4,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class Md5HashService implements IHashService
+public class Md5OldHashService implements IHashService
 {
-    private final char[] _HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-
     @Override
     public String Hash(String input)
     {
@@ -17,17 +15,12 @@ public class Md5HashService implements IHashService
         try
         {
             MessageDigest digest = MessageDigest.getInstance("MD5");
-            char[] chars = new char[32];
-            int i = 0;
+            StringBuilder sb = new StringBuilder();
 
             for(int b : digest.digest(input.getBytes(StandardCharsets.UTF_8)))
-            {
-                chars[i] = _HEX_CHARS[(b & 0xF0) >> 4];
-                chars[i + 1] = _HEX_CHARS[b & 0x0F];
-                i += 2;
-            }
+                sb.append(String.format("%02x", b & 0xFF));
 
-            return new String(chars);
+            return sb.toString();
         }
         catch (NoSuchAlgorithmException e) { throw new RuntimeException(e); }
     }
