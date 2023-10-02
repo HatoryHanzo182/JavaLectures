@@ -2,8 +2,8 @@ package step.learning;
 
 import com.google.inject.Guice;
 import step.learning.IOC.ConfigModule;
-import step.learning.IOC.IOC;
 import com.google.inject.Injector;
+import step.learning.IOC.IOC;
 import step.learning.IOC.IOC2;
 
 public class ResultLecture

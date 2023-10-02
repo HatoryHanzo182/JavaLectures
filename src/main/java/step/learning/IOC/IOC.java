@@ -1,9 +1,7 @@
 package step.learning.IOC;
 
-import com.google.inject.Guice;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
-import step.learning.IOC.Services.*;
+import step.learning.IOC.Services.Hash.*;
 
 public class IOC
 {

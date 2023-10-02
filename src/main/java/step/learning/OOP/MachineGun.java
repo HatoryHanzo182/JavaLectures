@@ -29,7 +29,6 @@ public class MachineGun extends Weapon implements IAutomatic, IClassified, IUsed
             if (!json_object.has(field))
                 throw new IllegalAccessException("MachineGun construct error: Missing required filed - " + field);
         }
-
         return new MachineGun(json_object.get(required_fields[0]).getAsString(),  json_object.get(required_fields[1]).getAsInt());
     }
 
@@ -43,7 +42,6 @@ public class MachineGun extends Weapon implements IAutomatic, IClassified, IUsed
             if (!json_object.has(field))
                 return false;
         }
-
         return true;
     }
 

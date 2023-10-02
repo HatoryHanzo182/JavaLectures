@@ -1,7 +1,6 @@
 package step.learning.OOP;
 
 import com.google.gson.*;
-
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -35,7 +34,6 @@ public class Armory
             if (weapon.getClass().isAnnotationPresent(ISerializable.class))
                 result.add(weapon);
         }
-
         return result;
     }
 
@@ -49,7 +47,6 @@ public class Armory
 
         try { resource_path = URLDecoder.decode(resource_path, "UTF-8"); }
         catch (UnsupportedEncodingException ignored) { }
-
 
         File resource_dictionary = new File(resource_path);
         File[] files = resource_dictionary.listFiles();
@@ -161,10 +158,7 @@ public class Armory
                     System.out.println("Weapon type unricognized");
             }
         }
-        catch(IllegalAccessException | InvocationTargetException ex )
-        {
-            throw new RuntimeException( "Reflection error: " + ex.getMessage() ) ;
-        }
+        catch(IllegalAccessException | InvocationTargetException ex ) { throw new RuntimeException( "Reflection error: " + ex.getMessage() ) ; }
         catch( IOException ex ) { throw new RuntimeException( "IO error: " + ex.getMessage() ); }
         catch( NullPointerException ignored ) { throw new RuntimeException( String.format("Resource 'armory.json' not found %n"));}
         catch( IllegalArgumentException ex ) { throw new RuntimeException( "JSON parse error: " + ex.getMessage() ) ; }

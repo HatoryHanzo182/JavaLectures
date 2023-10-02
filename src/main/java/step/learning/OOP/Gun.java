@@ -1,7 +1,6 @@
 package step.learning.OOP;
 
 import com.google.gson.JsonObject;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,7 +64,6 @@ public class Gun extends Weapon implements IClassified, IUsed
             if (field.isAnnotationPresent(IRequired.class))
                 required_fileds.add(field.getName());
         }
-
         return required_fileds;
     }
 

@@ -39,7 +39,6 @@ public class Rifle extends Weapon implements IUsed
             if (!json_object.has(field))
                 return false;
         }
-
         return true;
     }
 
