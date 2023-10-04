@@ -7,11 +7,11 @@ public class Async
 {
     //
     // + + + + + + + + + + Run3 + + + + + + + + + +
-    private String _constructed_number = "";
-    private Object _locker = new Object();
+    private String _constructed_number = "";  // Common string that threads will construct.
+    private Object _locker = new Object();  // Monitor object to synchronize access to _constructed_number.
 
-    class Pandigital implements Runnable
-    {
+    class Pandigital implements Runnable  // This class is used to create 10 threads, each of which will execute the run() method,
+    {                                    // which will generate a _constructed_number string using a different number added by each thread.
         private String _number;
 
         public Pandigital(String number)
@@ -55,12 +55,6 @@ public class Async
         System.out.println("---------------------\nResult: { " + _constructed_number + " }");
     }
     // + + + + + + + + + + + + + + + + + + + + + + +
-
-
-
-
-
-
 
     //
     // + + + + + + + + + + Run1 + + + + + + + + + +
