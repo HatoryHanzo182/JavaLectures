@@ -42,7 +42,7 @@ public class Async
 
                 if(is_last)
                     System.out.println("-------------------\nTotal: " + _sum);
-            }
+            } 
         }
     }
 
