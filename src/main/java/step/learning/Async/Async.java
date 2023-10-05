@@ -6,7 +6,7 @@ import java.util.Random;
 public class Async
 {
     //
-    // + + + + + + + + + + Run3 + + + + + + + + + +
+    // + + + + + + + + + + Run + + + + + + + + + +
     private String _constructed_number = "";  // Common string that threads will construct.
     private Object _locker = new Object();  // Monitor object to synchronize access to _constructed_number.
 
