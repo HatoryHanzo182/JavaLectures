@@ -1,71 +1,70 @@
 package step.learning.Async;
 
-import java.util.SortedMap;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.concurrent.Semaphore;
 
 public class Task
 {
     //
     // + + + + + + + + + + Run + + + + + + + + + +
+    private double _sum = 100;
+
+    class MonthRate implements Runnable
+    {
+        private final int _month;
+        private Semaphore _semaphore = new Semaphore(6);
+
+        public MonthRate(int month)
+        {
+            this._month = month;
+        }
+
+        @Override
+        public void run()
+        {
+            try
+            {
+                _semaphore.acquire();
+
+                double percent = 10.0;
+                double factor = (1.0 + percent / 100.0);
+
+                synchronized (this)
+                {
+                    _sum = _sum * factor;
+                }
+
+                System.out.printf("Month: %2d, percent: %.2f, sum: %.2f %n", _month, percent, _sum);
+            }
+            catch (InterruptedException ex) { System.err.println(ex.getMessage()); }
+            finally { _semaphore.release(); }
+        }
+    }
+
     public void Run()
     {
-        long t = System.nanoTime();
-        Supplier<String> supplier = new Supplier<String>()
-        {
-            @Override
-            public String get()
-            {
-                try { TimeUnit.MILLISECONDS.sleep(500); }
-                catch (InterruptedException ex) { System.err.println("!SUPPLIER! (" + ex.getMessage() + ")"); }
+        int months = 12;
+        int maxConcurrentThreads = 6;
 
-                return "Supply of smith";
-            }
-        };
-        Consumer<String> consumer = new Consumer<String>()
-        {
-            @Override
-            public void accept(String s) { System.out.printf("%.1f: Accepted '%s'\n", (System.nanoTime() - t) / 1e6, s); }
-        };
-        Function<String, String> add_question = new Function<String, String>()
-        {
-            @Override
-            public String apply(String s)
-            {
-                return s + "?";
-            }
-        };
+        ExecutorService executor = Executors.newFixedThreadPool(maxConcurrentThreads);
 
-        Future<String> task = CompletableFuture.supplyAsync(supplier, thread_pool);
-        Future<?> task2 = CompletableFuture.supplyAsync(supplier, thread_pool).thenAccept(consumer);
-        Future<String> task3 = CompletableFuture.supplyAsync(supplier, thread_pool).thenApply(add_question).thenApply(add_question);
+        for (int i = 0; i < months; i++) {
+            Runnable worker = new MonthRate(i + 1);
+            executor.execute(worker);
+        }
+
+        executor.shutdown();
 
         try
         {
-            String res = task.get();
+            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 
-            System.out.printf("%.1f: %s\n", (System.nanoTime() - t) / 1e6, res);
-
-            res = task3.get();
-
-            System.out.printf("%.1f: %s\n", (System.nanoTime() - t) / 1e6, res);
+            System.out.println("-------------------\nTotal: " + _sum);
         }
-        catch(InterruptedException | ExecutionException ex) { System.err.println(ex.getMessage()); }
-
-        thread_pool.shutdown();
-
-        try
-        {
-            boolean is_done = thread_pool.awaitTermination(300, TimeUnit.MILLISECONDS);
-
-            if(!is_done)
-                thread_pool.shutdownNow();
-        }
-        catch (InterruptedException ex) { System.err.println(ex.getMessage()); }
-
-        System.out.printf("%.1f: Main finished \n", (System.nanoTime() - t) / 1e6);
+        catch (InterruptedException ex) { ex.printStackTrace(); }
     }
     // + + + + + + + + + + + + + + + + + + + + + + +
 
@@ -135,6 +134,67 @@ public class Task
 
         thread_pool.shutdown();
         System.out.printf("%.1f: Main finishes!\n", (System.nanoTime() - t) / 1e6);
+    }
+    // + + + + + + + + + + + + + + + + + + + + + + +
+
+    //
+    // + + + + + + + + + + Run3 + + + + + + + + + +
+    public void Run3()
+    {
+        long t = System.nanoTime();
+        Supplier<String> supplier = new Supplier<String>()
+        {
+            @Override
+            public String get()
+            {
+                try { TimeUnit.MILLISECONDS.sleep(500); }
+                catch (InterruptedException ex) { System.err.println("!SUPPLIER! (" + ex.getMessage() + ")"); }
+
+                return "Supply of smith";
+            }
+        };
+        Consumer<String> consumer = new Consumer<String>()
+        {
+            @Override
+            public void accept(String s) { System.out.printf("%.1f: Accepted '%s'\n", (System.nanoTime() - t) / 1e6, s); }
+        };
+        Function<String, String> add_question = new Function<String, String>()
+        {
+            @Override
+            public String apply(String s)
+            {
+                return s + "?";
+            }
+        };
+
+        Future<String> task = CompletableFuture.supplyAsync(supplier, thread_pool);
+        Future<?> task2 = CompletableFuture.supplyAsync(supplier, thread_pool).thenAccept(consumer);
+        Future<String> task3 = CompletableFuture.supplyAsync(supplier, thread_pool).thenApply(add_question).thenApply(add_question);
+
+        try
+        {
+            String res = task.get();
+
+            System.out.printf("%.1f: %s\n", (System.nanoTime() - t) / 1e6, res);
+
+            res = task3.get();
+
+            System.out.printf("%.1f: %s\n", (System.nanoTime() - t) / 1e6, res);
+        }
+        catch(InterruptedException | ExecutionException ex) { System.err.println(ex.getMessage()); }
+
+        thread_pool.shutdown();
+
+        try
+        {
+            boolean is_done = thread_pool.awaitTermination(300, TimeUnit.MILLISECONDS);
+
+            if(!is_done)
+                thread_pool.shutdownNow();
+        }
+        catch (InterruptedException ex) { System.err.println(ex.getMessage()); }
+
+        System.out.printf("%.1f: Main finished \n", (System.nanoTime() - t) / 1e6);
     }
     // + + + + + + + + + + + + + + + + + + + + + + +
 }
